@@ -30,8 +30,11 @@ jobs:
         with:
           node-version: '20' # 或其他 Node.js 版本
 
-      - name: Deploy to GitHub Pages
-        uses: peaceiris/actions-gh-pages@v3
+      - name: Upload artifact
+        uses: actions/upload-pages-artifact@v3
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
-          publish_dir: ./dist # 替换为你的打包输出目录
+          # Upload entire repository
+          path: '/docs'
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
