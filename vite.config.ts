@@ -17,6 +17,9 @@ export default defineConfig({
       process: 'process/browser'
     }
   },
+  build: {
+    outDir: 'doc'
+  },
   define: {
     '__dirname': '""',
   }
