@@ -2,17 +2,17 @@
   <div id="app">
     <code-mirror v-model="vueSourceStr" title="Vue Component(editable)" />
     <md-preview v-model="mdSource" />
-    <code-mirror ref="consumeMirror" v-model="consumerSource" v-if="controlStore.showGeneratedContent" title="Generated content" :mode="consumerMode"
-      theme="darcula" read-only>
+    <code-mirror ref="consumeMirror" v-model="consumerSource" v-if="controlStore.showGeneratedContent"
+      title="Generated content" :mode="consumerMode" theme="darcula" read-only>
       <button type="button" :class="{ active: currentType === 0 }" @click="handleSwitch(0)">
-        Raw Markdown
-      </button>
-      <button type="button" :class="{ active: currentType === 1 }" @click="handleSwitch(1)">
         Parser Result
+      </button>
+      <!-- <button type="button" :class="{ active: currentType === 1 }" @click="handleSwitch(1)">
+        Raw Markdown
       </button>
       <button type="button" :class="{ active: currentType === 2 }" @click="handleSwitch(2)">
         Render Result
-      </button>
+      </button> -->
     </code-mirror>
   </div>
 </template>
@@ -44,12 +44,120 @@ watch(vueSourceStr, make, { immediate: true })
 
 function make() {
   try {
-    parserRes.value = parser(delScriptJsonBlock(vueSourceStr.value))
-    const VR = new Render(parserRes.value)
+    // console.log(' --------- vue make', vueSourceStr.value)
+    parserRes.value = parser(delScriptJsonBlock(vueSourceStr.value), { isMpx: true })
+    const VR = new Render(parserRes.value, {
+      props: [
+        {
+          type: 'Name',
+          zh: '参数',
+          en: 'Name'
+        },
+        {
+          type: 'Description',
+          zh: '说明',
+          en: 'Description'
+        },
+        {
+          type: 'Type',
+          zh: '类型',
+          en: 'Type'
+        },
+        {
+          type: 'Optional',
+          zh: '可选值',
+          en: 'Optional'
+        },
+        {
+          type: 'Default',
+          zh: '默认值',
+          en: 'Default'
+        }
+        // {
+        //   type: 'Wx',
+        //   zh: '微信',
+        //   en: 'WeChat'
+        // },
+        // {
+        //   type: 'Web',
+        //   zh: 'web',
+        //   en: 'web'
+        // },
+        // {
+        //   type: 'Ali',
+        //   zh: '支付宝',
+        //   en: 'Alipay'
+        // }
+      ],
+      slots: [
+        {
+          type: 'Name',
+          zh: '插槽名',
+          en: 'Name'
+        },
+        {
+          type: 'Description',
+          zh: '说明',
+          en: 'Description'
+        }
+        // {
+        //   type: 'Default',
+        //   zh: '默认值',
+        //   en: 'Default Slot Content'
+        // }
+      ],
+      methods: [
+        {
+          type: 'Name',
+          zh: '组件实例方法',
+          en: 'Method Name'
+        },
+        {
+          type: 'Description',
+          zh: '说明',
+          en: 'Description'
+        },
+        {
+          type: 'Parameters',
+          zh: '参数',
+          en: 'Parameters'
+        },
+        {
+          type: 'Return',
+          zh: '返回值',
+          en: 'Return'
+        }
+      ],
+      events: [
+        {
+          type: 'Name',
+          zh: '事件名',
+          en: 'Method Name'
+        },
+        {
+          type: 'Description',
+          zh: '说明',
+          en: 'Description'
+        },
+        {
+          type: 'Parameters',
+          zh: '参数',
+          en: 'Parameters'
+        }
+      ],
+      mixIns: [
+        {
+          type: 'Name',
+          zh: '参数',
+          en: 'Name'
+        }
+      ]
+    })
     mdRes = VR.renderMarkdown()
     renderRes.value = VR.render()
     handleSwitch(currentType.value)
   } catch (e: any) {
+    console.log('--------- error', e)
     consumerSource.value = e.toString()
   }
 }
@@ -57,16 +165,17 @@ function make() {
 function handleSwitch(type: number) {
   currentType.value = type
   switch (type) {
-    // Raw markdown
-    case 0:
-      consumerSource.value = mdRes ? mdRes.content : ''
-      mdSource.value = consumerSource.value
-      consumerMode.value = 'markdown'
-      break
     // Parser result
-    case 1:
+    case 0:
+      mdSource.value = mdRes ? mdRes.content : ''
       consumerSource.value = stringify(parserRes.value)
       consumerMode.value = 'javascript'
+      break
+    // Raw markdown
+    case 1:
+      consumerSource.value = mdRes ? mdRes.content : ''
+      // console.log('------- mdRes', mdRes.content)
+      consumerMode.value = 'markdown'
       break
     // Render result
     case 2:

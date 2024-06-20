@@ -14,14 +14,23 @@
     "format": "prettier --write src/"
   },
   "dependencies": {
+    "@codemirror/lang-javascript": "^6.2.2",
+    "@codemirror/theme-one-dark": "^6.1.2",
+    "@codemirror/view": "^6.28.1",
     "@mpxjs/vuese-markdown-render": "^1.0.0",
     "@mpxjs/vuese-parser": "^1.0.2",
+    "@upleveled/theme-vs-code-dark-plus": "github:upleveled/theme-vs-code-dark-plus",
+    "cm6-theme-basic-dark": "^0.2.0",
+    "cm6-theme-gruvbox-light": "^0.2.0",
+    "cm6-theme-material-dark": "^0.2.0",
+    "cm6-theme-solarized-dark": "^0.2.0",
+    "cm6-theme-solarized-light": "^0.2.0",
+    "codemirror": "^6.0.1",
     "pinia": "^2.1.7",
     "throttle-debounce": "^5.0.0",
     "vite-plugin-node-polyfills": "^0.22.0",
     "vue": "^3.4.21",
-    "vue-router": "^4.3.0",
-    "codemirror": "^5.42.2"
+    "vue-router": "^4.3.0"
   },
   "devDependencies": {
     "@rushstack/eslint-patch": "^1.8.0",
@@ -41,7 +50,7 @@
     "prettier": "^3.2.5",
     "stylus": "^0.63.0",
     "typescript": "~5.4.0",
-    "vite": "^5.2.8",
+    "vite": "^5.3.1",
     "vitest": "^1.4.0",
     "vue-tsc": "^2.0.11"
   }

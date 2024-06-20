@@ -4,17 +4,27 @@
       {{ title }}
       <slot />
     </header>
-    <textarea ref="editor" />
+    <div :class="$style.editorContainer">
+      <div ref="editor"></div>
+    </div>
   </div>
 </template>
 
 <script setup>
 import { onMounted, ref, watch } from 'vue'
-import CodeMirror from 'codemirror'
 import { debounce } from 'throttle-debounce'
-import 'codemirror/mode/markdown/markdown'
-import 'codemirror/mode/vue/vue'
-import 'codemirror/mode/javascript/javascript'
+import { basicSetup } from 'codemirror'
+import { keymap, EditorView } from "@codemirror/view"
+import { defaultKeymap, history, historyKeymap } from "@codemirror/commands"
+import { javascript } from "@codemirror/lang-javascript"
+// https://github.com/craftzdog/cm6-themes
+// import { solarizedDark } from 'cm6-theme-solarized-dark'
+// import { basicDark } from 'cm6-theme-basic-dark'
+// import { solarizedLight } from 'cm6-theme-solarized-light'
+// import { gruvboxLight } from 'cm6-theme-gruvbox-light'
+import { materialDark } from 'cm6-theme-material-dark'
+
+// import * as monaco from "monaco-editor";
 
 const props = defineProps({
   readOnly: {
@@ -43,15 +53,13 @@ const props = defineProps({
   }
 })
 
-const vModel = defineModel()
-
 const editorIns = ref(null)
 const editor = ref(null)
-
-const inputEmit = defineEmits(['input'])
+const vModel = defineModel()
 
 watch(vModel, (val) => {
-  props.readOnly && editorIns.value.setValue(val)
+  console.log(' ------ 触发 watch', val, props.readOnly)
+  props.readOnly && setValue(val)
 })
 
 watch(props.mode, (val) => {
@@ -59,39 +67,40 @@ watch(props.mode, (val) => {
 }, { immediate: true })
 
 onMounted(() => {
-  editorIns.value = CodeMirror.fromTextArea(editor.value, {
-    value: '',
-    mode: props.mode,
-    theme: props.theme,
-    lineNumbers: true,
-    styleActiveLine: true,
-    autofocus: props.readOnly ? false : true,
-    readOnly: props.readOnly,
-    matchBrackets: true,
-    lineWrapping: true
+  editorIns.value = new EditorView({
+    doc: vModel.value,
+    extensions: [
+      // basicSetup 是一套插件集合，包含了很多常用插件
+      basicSetup,
+      // 新版本一切皆插件，所以实时侦听数据变化也要通过写插件实现
+      EditorView.updateListener.of(debounce(500, (v) => {
+        if (props.readOnly) return;
+        vModel.value = v.state.doc.toString();
+      })),
+      materialDark,
+      history(),
+      keymap.of([...defaultKeymap, ...historyKeymap]),
+      javascript()
+    ],
+    parent: editor.value
   })
-  editorIns.value.setValue(vModel.value.trim())
-
-  editorIns.value.on(
-    'change',
-    debounce(500, () => {
-      inputEmit('input', editorIns.value.getValue())
-    })
-  )
+  setValue(vModel.value.trim())
 })
+
+function setValue (code) {
+  // console.log('------ 触发 setValue', code)
+  editorIns.value.dispatch({
+    change: { from: 0, to: editorIns.value.state.doc.length, insert: code }
+  })
+}
 
 </script>
 
-<style src="codemirror/lib/codemirror.css"></style>
-<style src="codemirror/theme/panda-syntax.css"></style>
-<style src="codemirror/theme/base16-light.css"></style>
-<style src="codemirror/theme/darcula.css"></style>
-<style src="codemirror/theme/neo.css"></style>
-<style lang="stylus">
-.CodeMirror
-  flex 1
-</style>
 <style lang="stylus" module>
+.editorContainer
+  flex 1
+  height 100%
+  overflow scroll
 .editorBox
   display flex
   flex-direction column
