@@ -18,7 +18,7 @@ export default defineConfig({
     }
   },
   build: {
-    outDir: 'doc'
+    outDir: 'docs'
   },
   define: {
     '__dirname': '""',
