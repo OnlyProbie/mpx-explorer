@@ -11,7 +11,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref, watch } from 'vue'
+import { ref, watch, type ModelRef } from 'vue'
 import useCodeMirror from '../utils/useCodeMirror'
 
 const props = defineProps({
@@ -26,30 +26,30 @@ const props = defineProps({
   mode: {
     type: String,
     default: 'vue',
-    validator(mode) {
+    validator(mode: string) {
       return ['vue', 'markdown', 'javascript'].indexOf(mode) > -1
     }
   },
   theme: {
     type: String,
     default: 'panda-syntax',
-    validator(theme) {
+    validator(theme: string) {
       return (
         ['panda-syntax', 'base16-light', 'darcula', 'neo'].indexOf(theme) > -1
       )
     }
   }
 })
-const editor = ref(null)
+const editor = ref(null as unknown as HTMLDivElement)
 const vModel = defineModel()
 
-const { setValue } = useCodeMirror(editor, vModel, {
+const { setValue } = useCodeMirror(editor!, vModel as ModelRef<string>, {
   readOnly: props.readOnly,
   mode: props.mode,
 })
 
 watch(vModel, (val) => {
-  props.readOnly && setValue(val)
+  props.readOnly && setValue(val as string)
 })
 
 </script>

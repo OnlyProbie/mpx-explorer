@@ -1,4 +1,4 @@
-import { onMounted, ref, watch, type Ref } from 'vue'
+import { onMounted, ref, watch, type Ref, type ModelRef } from 'vue'
 import { debounce } from 'throttle-debounce'
 import { basicSetup } from 'codemirror'
 import { keymap, EditorView } from "@codemirror/view"
@@ -54,10 +54,10 @@ const blockCommentCompletion = EditorView.updateListener.of(update => {
 
 export default function useCodeMirror(
   editor: Ref<HTMLDivElement>,
-  vModel: Ref<string>,
+  vModel: ModelRef<string>,
   options?: {
     value?: string;
-    mode?: 'javascript' | 'vue';
+    mode?: string;
     theme?: 'material-dark';
     readOnly?: boolean;
     extensions?: any[];

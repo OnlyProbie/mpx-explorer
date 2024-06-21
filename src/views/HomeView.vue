@@ -27,6 +27,7 @@ const {
   vueSourceStr,
   currentType,
   consumerMode,
+  consumerSource,
   mdSource,
   handleSwitch,
   CodeMirror,

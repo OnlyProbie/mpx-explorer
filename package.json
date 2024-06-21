@@ -22,6 +22,7 @@
     "@codemirror/view": "^6.28.1",
     "@mpxjs/vuese-markdown-render": "^1.0.0",
     "@mpxjs/vuese-parser": "^1.0.2",
+    "@types/markdown-it": "^14.1.1",
     "@upleveled/theme-vs-code-dark-plus": "github:upleveled/theme-vs-code-dark-plus",
     "cm6-theme-basic-dark": "^0.2.0",
     "cm6-theme-gruvbox-light": "^0.2.0",
