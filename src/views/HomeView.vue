@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <code-mirror v-model="vueSourceStr" title="Vue Component(editable)" />
+    <code-mirror style="max-width:50%;" v-model="vueSourceStr" title="Vue Component(editable)" />
     <md-preview v-model="mdSource" />
     <code-mirror ref="consumeMirror" v-model="consumerSource" v-if="controlStore.showGeneratedContent"
       title="Generated content" :mode="consumerMode" theme="darcula" read-only>
@@ -99,12 +99,12 @@ function make() {
           type: 'Description',
           zh: '说明',
           en: 'Description'
+        },
+        {
+          type: 'Default',
+          zh: '默认值',
+          en: 'Default Slot Content'
         }
-        // {
-        //   type: 'Default',
-        //   zh: '默认值',
-        //   en: 'Default Slot Content'
-        // }
       ],
       methods: [
         {

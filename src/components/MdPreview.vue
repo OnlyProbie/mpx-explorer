@@ -36,4 +36,5 @@ function markdownItdRender() {
 .md-container
   flex 1
   margin 10px
+  overflow scroll
 </style>
