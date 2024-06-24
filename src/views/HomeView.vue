@@ -18,7 +18,7 @@
 </template>
 
 <script setup lang="ts">
-import { useControlStore } from '../stores/control'
+import { useControlStore } from '@/stores/control'
 import useMpxToMdRender from '@/hooks/useMpxToMdRender'
 
 const controlStore = useControlStore()
