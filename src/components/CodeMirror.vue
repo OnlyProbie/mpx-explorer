@@ -12,7 +12,7 @@
 
 <script setup lang="ts">
 import { ref, watch, type ModelRef } from 'vue'
-import useCodeMirror from '../utils/useCodeMirror'
+import useCodeMirror from '@/hooks/useCodeMirror'
 
 const props = defineProps({
   readOnly: {
@@ -71,3 +71,4 @@ watch(vModel, (val) => {
   align-items center
   height 40px
 </style>
+../hooks/useCodeMirror

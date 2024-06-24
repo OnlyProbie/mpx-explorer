@@ -19,7 +19,7 @@
 
 <script setup lang="ts">
 import { useControlStore } from '../stores/control'
-import useMpxToMdRender from '@/utils/useMpxToMdRender'
+import useMpxToMdRender from '@/hooks/useMpxToMdRender'
 
 const controlStore = useControlStore()
 

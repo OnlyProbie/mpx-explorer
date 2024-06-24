@@ -7,7 +7,7 @@
 
 <script setup lang="ts">
 import { nextTick, watch } from 'vue'
-import markdownIt from '@/utils/markdown-it-init'
+import markdownIt from '@/utils/markdownItInit'
 
 const vModel = defineModel()
 
@@ -15,7 +15,7 @@ watch(vModel, markdownItdRender, { immediate: true })
 
 function markdownItdRender() {
   if (vModel.value) {
-    const htmlSource = markdownIt.render(vModel.value)
+    const htmlSource = markdownIt.render(vModel.value as string)
     nextTick(() => {
       document.querySelector('#result')!.innerHTML = htmlSource || ''
     })
